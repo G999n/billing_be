@@ -5,16 +5,11 @@ namespace billing_be.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-        public DbSet<MedicineRecord> MedicineRecords { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.HasPostgresExtension("pg_trgm");
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options) { }
 
-            modelBuilder.Entity<MedicineRecord>()
-                .HasIndex(m => m.Name)
-                .HasMethod("gin") 
-                .HasOperators("gin_trgm_ops");
-        }
+        public DbSet<Medicine> Medicines => Set<Medicine>();
+        public DbSet<Inventory> Inventories => Set<Inventory>();
     }
+
 }
