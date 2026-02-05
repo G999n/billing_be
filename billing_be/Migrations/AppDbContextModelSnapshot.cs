@@ -80,6 +80,9 @@ namespace billing_be.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdditionalNotes")
+                        .HasColumnType("text");
+
                     b.Property<string>("Brand")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");

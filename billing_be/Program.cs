@@ -16,7 +16,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("Default"));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200") // Your Angular Port
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAngularDev");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
