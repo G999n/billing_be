@@ -10,6 +10,7 @@ namespace billing_be.Data
 
         public DbSet<Medicine> Medicines => Set<Medicine>();
         public DbSet<Inventory> Inventories => Set<Inventory>();
+        public DbSet<Client> Clients => Set<Client>();
     }
 
 }
