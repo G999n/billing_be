@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using billing_be.Data;
@@ -11,9 +12,11 @@ using billing_be.Data;
 namespace billing_be.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260207211750_AddPurchaseTables")]
+    partial class AddPurchaseTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,94 +149,6 @@ namespace billing_be.Migrations
                     b.ToTable("Medicines");
                 });
 
-            modelBuilder.Entity("billing_be.Models.PurchaseChalan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateOnly>("InvoiceDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("InvoiceNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("PaymentTerms")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("PurchaseChalans");
-                });
-
-            modelBuilder.Entity("billing_be.Models.PurchaseChalanItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("BatchNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateOnly?>("ExpiryDate")
-                        .HasColumnType("date");
-
-                    b.Property<int>("FreeQuantity")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("GstPercentage")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("MedicineId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Mrp")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("PurchaseChalanId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("PurchaseRate")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("SalePrice")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MedicineId");
-
-                    b.HasIndex("PurchaseChalanId");
-
-                    b.ToTable("PurchaseChalanItems");
-                });
-
             modelBuilder.Entity("billing_be.Models.Inventory", b =>
                 {
                     b.HasOne("billing_be.Models.Medicine", "Medicine")
@@ -245,44 +160,9 @@ namespace billing_be.Migrations
                     b.Navigation("Medicine");
                 });
 
-            modelBuilder.Entity("billing_be.Models.PurchaseChalan", b =>
-                {
-                    b.HasOne("billing_be.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("billing_be.Models.PurchaseChalanItem", b =>
-                {
-                    b.HasOne("billing_be.Models.Medicine", "Medicine")
-                        .WithMany()
-                        .HasForeignKey("MedicineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("billing_be.Models.PurchaseChalan", "PurchaseChalan")
-                        .WithMany("Items")
-                        .HasForeignKey("PurchaseChalanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Medicine");
-
-                    b.Navigation("PurchaseChalan");
-                });
-
             modelBuilder.Entity("billing_be.Models.Medicine", b =>
                 {
                     b.Navigation("Inventories");
-                });
-
-            modelBuilder.Entity("billing_be.Models.PurchaseChalan", b =>
-                {
-                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using billing_be.Data;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -6,7 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // This stops the infinite loop error of cycles : like Medicine has inventory and vice versa
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
