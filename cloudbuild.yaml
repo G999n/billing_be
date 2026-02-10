@@ -1,14 +1,13 @@
 steps:
 # 1. Build the Container Image
-# This uses the Dockerfile in the current directory
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/billing-repo/billing-backend:$COMMIT_SHA', '-f', 'Dockerfile', '.']
 
-# 2. Push the Image to Artifact Registry (The Warehouse)
+# 2. Push the Image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/billing-repo/billing-backend:$COMMIT_SHA']
 
-# 3. Deploy the New Image to Cloud Run
+# 3. Deploy to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
@@ -23,6 +22,9 @@ steps:
   - '--set-env-vars'
   - 'ASPNETCORE_ENVIRONMENT=Production'
 
-# Speed up future builds by caching layers
+# --- THE FIX IS HERE ---
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 images:
 - 'us-central1-docker.pkg.dev/$PROJECT_ID/billing-repo/billing-backend:$COMMIT_SHA'
