@@ -29,7 +29,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngularDev",
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200") // Your Angular Port
+            builder.WithOrigins("http://localhost:4200", "https://billing-software-486919.web.app") // Your Angular Port
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
