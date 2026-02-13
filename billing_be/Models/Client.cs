@@ -8,7 +8,7 @@ public class Client
     public int Id { get; set; }
 
     [Required, MaxLength(200)]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!; // This acts as "Party Name"
 
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
@@ -20,7 +20,11 @@ public class Client
     public string? Address { get; set; }
 
     [MaxLength(50)]
-    public string? GstNumber { get; set; } // Useful for billing invoices
+    public string? GstNumber { get; set; }
+
+    // 👇 NEW FIELD ADDED HERE
+    [MaxLength(50)]
+    public string? DrugLicense { get; set; }
 
     public bool IsActive { get; set; } = true;
 }

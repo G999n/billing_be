@@ -28,7 +28,6 @@ public class ClientsController : ControllerBase
     public async Task<ActionResult<Client>> GetById(int id)
     {
         var client = await _context.Clients.FindAsync(id);
-
         if (client == null) return NotFound();
         return client;
     }
@@ -39,7 +38,6 @@ public class ClientsController : ControllerBase
     {
         _context.Clients.Add(client);
         await _context.SaveChangesAsync();
-
         return CreatedAtAction(nameof(GetById), new { id = client.Id }, client);
     }
 
@@ -58,6 +56,10 @@ public class ClientsController : ControllerBase
         client.Email = updated.Email;
         client.Address = updated.Address;
         client.GstNumber = updated.GstNumber;
+
+        // 👇 NEW: Update the Drug License
+        client.DrugLicense = updated.DrugLicense;
+
         client.IsActive = updated.IsActive;
 
         await _context.SaveChangesAsync();
@@ -82,10 +84,12 @@ public class ClientsController : ControllerBase
     {
         if (string.IsNullOrWhiteSpace(q)) return BadRequest();
 
-        // Searches by Name OR Phone Number
+        // 👇 NEW: Added DrugLicense to search logic
+        // Searches by Name OR Phone OR Drug License
         var results = await _context.Clients
             .Where(c => EF.Functions.ILike(c.Name, $"%{q}%") ||
-                        EF.Functions.ILike(c.PhoneNumber, $"%{q}%"))
+                        EF.Functions.ILike(c.PhoneNumber, $"%{q}%") ||
+                        EF.Functions.ILike(c.DrugLicense, $"%{q}%"))
             .ToListAsync();
 
         return results;
